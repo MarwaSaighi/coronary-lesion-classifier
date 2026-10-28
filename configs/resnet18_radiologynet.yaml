@@ -1,0 +1,14 @@
+# Same as resnet18.yaml, but the backbone is pretrained on medical images.
+# Weights: https://github.com/AIlab-RITEH/RadiologyNET-TL-models (ResNet18.pth)
+run_name: resnet18_radiologynet
+arch: resnet18
+pretrain: radiologynet
+weights_path: weights/radiologynet/ResNet18.pth
+seed: 0
+batch_size: 32
+lr: 1.0e-3
+weight_decay: 1.0e-4
+max_epochs: 30
+patience: 8
+hidden: 128
+dropout: 0.3

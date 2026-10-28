@@ -1,0 +1,5 @@
+torch
+torchvision
+pandas
+pillow
+gradio==6.30.0

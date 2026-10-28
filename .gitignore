@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+.venv/
+.ipynb_checkpoints/
+
+# data, weights and training outputs are never committed
+data/
+weights/
+runs/
+*.pt
+*.pth
+!demo/examples/*.png

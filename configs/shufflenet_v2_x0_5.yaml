@@ -1,0 +1,11 @@
+run_name: shufflenet_v2_x0_5
+arch: shufflenet_v2_x0_5
+pretrain: imagenet
+seed: 0
+batch_size: 32
+lr: 1.0e-3
+weight_decay: 1.0e-4
+max_epochs: 30
+patience: 8
+hidden: 128
+dropout: 0.3
