@@ -10,6 +10,13 @@ import torch
 from angio_cls.data import eval_transform
 from angio_cls.models import LesionClassifier, p_lesion
 
+try:  # Hugging Face ZeroGPU hardware needs GPU functions marked; no-op elsewhere
+    import spaces
+    gpu = spaces.GPU
+except ImportError:
+    def gpu(fn):
+        return fn
+
 HERE = Path(__file__).parent
 ckpt = torch.load(HERE / "model.pt", map_location="cpu", weights_only=False)
 THRESHOLD = ckpt["threshold"]
@@ -19,11 +26,15 @@ model.eval_mode()
 transform = eval_transform()
 
 
+@gpu
 def predict(image):
     if image is None:
         return None, ""
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    model.to(device)
+    x = transform(image.convert("RGB")).unsqueeze(0).to(device)
     with torch.no_grad():
-        p = float(p_lesion(model(transform(image.convert("RGB")).unsqueeze(0)))[0])
+        p = float(p_lesion(model(x))[0])
     verdict = "**Lesion detected**" if p >= THRESHOLD else "**No lesion detected**"
     note = (f"{verdict}: P(lesion) = {p:.2f}, decision threshold {THRESHOLD:.2f} "
             "(chosen on validation patients to balance sensitivity and specificity).")
